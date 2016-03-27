@@ -50,7 +50,7 @@ public class FPSControlTurboExtreme2 : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Space) && hasJump) {
             hasJump = false;
-            rigid.velocity = new Vector3(rigid.velocity.x, jumpPower, rigid.velocity.z);
+            //rigid.velocity = new Vector3(rigid.velocity.x, jumpPower, rigid.velocity.z);
         }
     }
 
