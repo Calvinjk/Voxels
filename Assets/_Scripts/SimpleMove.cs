@@ -4,9 +4,11 @@ using System.Collections;
 public class SimpleMove : MonoBehaviour {
 
     public float moveSpeed = 1f;
+    public float jumpheight = 1f;
     public bool _______________________________;
     public float horizontalInput;
     public float verticalInput;
+    public bool hasJump = true;
 
 	// Use this for initialization
 	void Start () {
@@ -19,5 +21,16 @@ public class SimpleMove : MonoBehaviour {
         verticalInput = Input.GetAxis("Vertical") * moveSpeed;
 
         GetComponent<Rigidbody>().AddForce(horizontalInput, 0f, verticalInput);
+
+        if (Input.GetKey(KeyCode.Space) && hasJump) {
+            hasJump = false;
+            GetComponent<Rigidbody>().AddForce(0f, jumpheight, 0f);
+        }
+    }
+
+    void OnCollisionStay(Collision coll) {
+        if (coll.gameObject.tag == "Ground") {
+            hasJump = true;
+        }
     }
 }
