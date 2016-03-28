@@ -25,7 +25,7 @@ public class Shatter : MonoBehaviour {
 	}
 
     void OnTriggerEnter(Collider coll) {
-        if (coll.gameObject.name == "Player" || coll.gameObject.name == "voxel") {  
+        if (coll.gameObject.name == "Player" || coll.gameObject.name == "Voxel") {  
             Die();
         }
     }
@@ -73,6 +73,6 @@ public class Shatter : MonoBehaviour {
         GameObject curVox = Instantiate(voxel, pos + adj, rot) as GameObject;
         curVox.transform.localScale = scale / Mathf.Pow(2, shatterMult);
         curVox.GetComponent<Renderer>().material = mat;
-        curVox.name = "voxel";
+        curVox.name = "Voxel";
     }
 }
