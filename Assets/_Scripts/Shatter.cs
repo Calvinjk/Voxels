@@ -5,7 +5,7 @@ public class Shatter : MonoBehaviour {
 
     public GameObject voxel;
     public int shatterMult = 1;     //1 = 8 pieces, 2 = 64 pieces, etc.   Pieces = 8^shatterMult.  Does nothing if shatterMult < 1
-
+    public float voxelLifeSpan = 0f;
 
     public bool __SWITCHES__;
     public bool enterToShatter = false;
@@ -74,5 +74,8 @@ public class Shatter : MonoBehaviour {
         curVox.transform.localScale = scale / Mathf.Pow(2, shatterMult);
         curVox.GetComponent<Renderer>().material = mat;
         curVox.name = "Voxel";
+
+        KillSelf killSelf = (KillSelf)curVox.GetComponent(typeof(KillSelf));
+        killSelf.timeAlive = voxelLifeSpan;
     }
 }
