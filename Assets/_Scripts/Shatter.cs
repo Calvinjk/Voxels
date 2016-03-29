@@ -17,7 +17,7 @@ public class Shatter : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         if (enterToShatter && Input.GetKeyDown(KeyCode.Return)) {
             Die();
             //Time.timeScale = 0;
@@ -77,5 +77,6 @@ public class Shatter : MonoBehaviour {
 
         KillSelf killSelf = (KillSelf)curVox.GetComponent(typeof(KillSelf));
         killSelf.timeAlive = voxelLifeSpan;
+        killSelf.startTimer = true;
     }
 }

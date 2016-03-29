@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FPSControlTurboExtreme2 : MonoBehaviour {
+public class PlayerController : MonoBehaviour {
 
     public float speed = 10f;
     public float jumpPower = 5f;

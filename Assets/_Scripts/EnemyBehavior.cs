@@ -14,7 +14,7 @@ public class EnemyBehavior : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         if (activated) {
             if (moving) {
                 WalkTowardsPlayer();
@@ -41,9 +41,11 @@ public class EnemyBehavior : MonoBehaviour {
         for (int i = 0; i <= transform.childCount; ++i) {
             transform.GetChild(i).gameObject.AddComponent<Rigidbody>();
             transform.GetChild(i).parent = null;
+            KillSelf killSelf = (KillSelf)transform.GetChild(i).gameObject.GetComponent(typeof(KillSelf));
+            killSelf.startTimer = true;
             if (transform.GetChild(i).name == "Body") {
-                Shatter script = (Shatter)transform.GetChild(i).gameObject.GetComponent(typeof(Shatter));
-                script.Die();
+                Shatter shatter = (Shatter)transform.GetChild(i).gameObject.GetComponent(typeof(Shatter));
+                shatter.Die();
             }
         }
 

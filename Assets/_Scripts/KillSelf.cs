@@ -4,6 +4,7 @@ using System.Collections;
 public class KillSelf : MonoBehaviour {
 
     public float timeAlive = 0f;
+    public bool startTimer = false;
     public bool ________________;
     public float curTimeAlive = 0f;
 
@@ -13,8 +14,10 @@ public class KillSelf : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        curTimeAlive += Time.deltaTime;
+	void FixedUpdate () {
+        if (startTimer) {
+            curTimeAlive += Time.deltaTime;
+        }
         if (curTimeAlive > timeAlive) {
             Destroy(gameObject);
         }
