@@ -3,14 +3,17 @@ using System.Collections;
 
 public class EnemyBehavior : MonoBehaviour {
 
-    public float moveSpeed  = 1f;
+    public enum EnemyType {Swarmer};
+
+    public EnemyType enemyType;
+    public Material[] possibleColors;
     public bool _______________;
     public bool activated   = false;
     public bool moving      = false;
 
 	// Use this for initialization
 	void Start () {
-	
+        GetComponent<Renderer>().material = possibleColors[Random.Range(0, possibleColors.Length)];
 	}
 	
 	// Update is called once per frame
@@ -23,32 +26,38 @@ public class EnemyBehavior : MonoBehaviour {
 	}
 
     void OnCollisionEnter(Collision coll) {
-        if (coll.gameObject.name == "Voxel") {
+        if (coll.gameObject.name == "Player") {
             Die();
         }
     }
 
     void WalkTowardsPlayer() {
         Vector3 playerPos = GameObject.Find("Player").transform.position;
-        transform.LookAt(playerPos);
-
-        Vector3 directionVector = playerPos - transform.position;
-        GetComponent<Rigidbody>().AddForce(directionVector.normalized * moveSpeed);
+        GetComponent<NavMeshAgent>().SetDestination(playerPos);
     }
 
     void Die() {
-        //Give all children a rigidbody and un-child it
-        for (int i = 0; i <= transform.childCount; ++i) {
-            transform.GetChild(i).gameObject.AddComponent<Rigidbody>();
-            transform.GetChild(i).parent = null;
-            KillSelf killSelf = (KillSelf)transform.GetChild(i).gameObject.GetComponent(typeof(KillSelf));
-            killSelf.startTimer = true;
-            if (transform.GetChild(i).name == "Body") {
-                Shatter shatter = (Shatter)transform.GetChild(i).gameObject.GetComponent(typeof(Shatter));
+        switch (enemyType) {
+            case EnemyType.Swarmer:
+                Shatter shatter = (Shatter)GetComponent(typeof(Shatter));
                 shatter.Die();
-            }
+                break;
+            default:
+                //Give all children a rigidbody and un-child it
+                for (int i = 0; i <= transform.childCount; ++i) {
+                    transform.GetChild(i).gameObject.AddComponent<Rigidbody>();
+                    transform.GetChild(i).parent = null;
+                    KillSelf killSelf = (KillSelf)transform.GetChild(i).gameObject.GetComponent(typeof(KillSelf));
+                    killSelf.startTimer = true;
+                    if (transform.GetChild(i).name == "Body") {
+                        Shatter s = (Shatter)transform.GetChild(i).gameObject.GetComponent(typeof(Shatter));
+                        s.Die();
+                    }
+                }
+
+                Destroy(this.gameObject);
+                break;
         }
 
-        Destroy(gameObject);
     }
 }

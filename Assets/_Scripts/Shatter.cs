@@ -4,11 +4,15 @@ using System.Collections;
 public class Shatter : MonoBehaviour {
 
     public GameObject voxel;
-    public int shatterMult = 1;     //1 = 8 pieces, 2 = 64 pieces, etc.   Pieces = 8^shatterMult.  Does nothing if shatterMult < 1
-    public float voxelLifeSpan = 0f;
+    public int shatterMult          = 1;     //1 = 8 pieces, 2 = 64 pieces, etc.   Pieces = 8^shatterMult.  Does nothing if shatterMult < 1
+    public float shatterSpeed       = 1f;
+    public float minVoxelLifeSpan   = 0f;
+    public float maxVoxelLifeSpan   = 0f;
 
-    public bool __SWITCHES__;
-    public bool enterToShatter = false;
+    public bool blowApart           = false;
+    public bool shatterOnVoxelTouch = false;
+    public bool enterToShatter      = false;
+    public bool wasEnvironment      = false;
     public bool ____________;
 
 	// Use this for initialization
@@ -24,17 +28,22 @@ public class Shatter : MonoBehaviour {
         }
 	}
 
-    void OnTriggerEnter(Collider coll) {
-        if (coll.gameObject.name == "Player" || coll.gameObject.name == "Voxel") {  
+    void OnCollisionEnter(Collision coll) {
+        if (shatterOnVoxelTouch && coll.gameObject.name == "Swarmer Voxel") {  
             Die();
         }
     }
     public void Die() { //Basic voxel shattering of cubes or rectangles
+        if (wasEnvironment) {
+            GetComponent<NavMeshObstacle>().carving = true; //TODO -- Fix this.   Doesnt work.   Need parent-child thing
+        }
+
         if (shatterMult > 0) { //shatterMult must be a positive integer
             Vector3 pos = transform.position;
             Vector3 scale = transform.localScale;
             Quaternion rot = transform.rotation;
             Material mat = GetComponent<Renderer>().material;
+            string name = gameObject.name;
 
             Destroy(gameObject);
 
@@ -51,7 +60,7 @@ public class Shatter : MonoBehaviour {
                 for (float y = -boundaryY; y <= boundaryY; y += stepY) {
                     for (float z = -boundaryZ; z <= boundaryZ; z += stepZ) {
                         Vector3 adjustmentVec = RotateAll(new Vector3(x, y, z), rot.eulerAngles);
-                        CreateVoxel(pos, adjustmentVec, rot, scale, mat);
+                        CreateVoxel(pos, adjustmentVec, rot, scale, mat, name);
                     }
                 }
             }
@@ -69,14 +78,24 @@ public class Shatter : MonoBehaviour {
         return q * vector;
     }
 
-    void CreateVoxel(Vector3 pos, Vector3 adj, Quaternion rot, Vector3 scale, Material mat) {
+    void CreateVoxel(Vector3 pos, Vector3 adj, Quaternion rot, Vector3 scale, Material mat, string parentName) {
         GameObject curVox = Instantiate(voxel, pos + adj, rot) as GameObject;
         curVox.transform.localScale = scale / Mathf.Pow(2, shatterMult);
         curVox.GetComponent<Renderer>().material = mat;
-        curVox.name = "Voxel";
+        curVox.name = parentName + " Voxel";
 
         KillSelf killSelf = (KillSelf)curVox.GetComponent(typeof(KillSelf));
-        killSelf.timeAlive = voxelLifeSpan;
+        killSelf.minTimeAlive = minVoxelLifeSpan;
+        killSelf.maxTimeAlive = maxVoxelLifeSpan;
         killSelf.startTimer = true;
+
+        if (blowApart) { 
+            GiveVoxelVelocity(pos, curVox); 
+        }
+    }
+
+    void GiveVoxelVelocity(Vector3 center, GameObject voxel) {
+        Vector3 vectorFromCenter = voxel.transform.position - center;
+        voxel.GetComponent<Rigidbody>().AddForce(vectorFromCenter.normalized * shatterSpeed);
     }
 }
