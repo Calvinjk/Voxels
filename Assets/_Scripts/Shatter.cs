@@ -10,6 +10,7 @@ public class Shatter : MonoBehaviour {
     public float maxVoxelLifeSpan   = 0f;
 
     public bool blowApart           = false;
+    public bool keepVelocity        = false;
     public bool shatterOnVoxelTouch = false;
     public bool enterToShatter      = false;
     public bool wasEnvironment      = false;
@@ -41,6 +42,7 @@ public class Shatter : MonoBehaviour {
         if (shatterMult > 0) { //shatterMult must be a positive integer
             Vector3 pos = transform.position;
             Vector3 scale = transform.localScale;
+            Vector3 velocity = GetComponent<Rigidbody>().velocity;
             Quaternion rot = transform.rotation;
             Material mat = GetComponent<Renderer>().material;
             string name = gameObject.name;
@@ -60,7 +62,7 @@ public class Shatter : MonoBehaviour {
                 for (float y = -boundaryY; y <= boundaryY; y += stepY) {
                     for (float z = -boundaryZ; z <= boundaryZ; z += stepZ) {
                         Vector3 adjustmentVec = RotateAll(new Vector3(x, y, z), rot.eulerAngles);
-                        CreateVoxel(pos, adjustmentVec, rot, scale, mat, name);
+                        CreateVoxel(pos, adjustmentVec, rot, scale, mat, name, velocity);
                     }
                 }
             }
@@ -78,7 +80,7 @@ public class Shatter : MonoBehaviour {
         return q * vector;
     }
 
-    void CreateVoxel(Vector3 pos, Vector3 adj, Quaternion rot, Vector3 scale, Material mat, string parentName) {
+    void CreateVoxel(Vector3 pos, Vector3 adj, Quaternion rot, Vector3 scale, Material mat, string parentName, Vector3 velocity) {
         GameObject curVox = Instantiate(voxel, pos + adj, rot) as GameObject;
         curVox.transform.localScale = scale / Mathf.Pow(2, shatterMult);
         curVox.GetComponent<Renderer>().material = mat;
@@ -89,13 +91,18 @@ public class Shatter : MonoBehaviour {
         killSelf.maxTimeAlive = maxVoxelLifeSpan;
         killSelf.startTimer = true;
 
-        if (blowApart) { 
-            GiveVoxelVelocity(pos, curVox); 
-        }
+        AddVoxelVelocity(pos, curVox, velocity);
+
     }
 
-    void GiveVoxelVelocity(Vector3 center, GameObject voxel) {
-        Vector3 vectorFromCenter = voxel.transform.position - center;
-        voxel.GetComponent<Rigidbody>().AddForce(vectorFromCenter.normalized * shatterSpeed);
+    void AddVoxelVelocity(Vector3 center, GameObject voxel, Vector3 startingVelocity) {
+        if (blowApart) {
+            Vector3 vectorFromCenter = voxel.transform.position - center;
+            voxel.GetComponent<Rigidbody>().AddForce(vectorFromCenter.normalized * shatterSpeed);
+        }
+        
+        if (keepVelocity) {
+            voxel.GetComponent<Rigidbody>().velocity += startingVelocity;
+        }
     }
 }
