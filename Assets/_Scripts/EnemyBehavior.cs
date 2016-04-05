@@ -9,19 +9,21 @@ public class EnemyBehavior : MonoBehaviour {
     public Material[] possibleColors;
     public bool _______________;
     public bool activated   = false;
-    public bool moving      = false;
+    NavMeshAgent agent;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
+        agent = GetComponent<NavMeshAgent>();
         GetComponent<Renderer>().material = possibleColors[Random.Range(0, possibleColors.Length)];
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
         if (activated) {
-            if (moving) {
-                WalkTowardsPlayer();
-            }
+            agent.enabled = true;
+            WalkTowardsPlayer();
+        } else {
+            agent.enabled = false;
         }
 	}
 
