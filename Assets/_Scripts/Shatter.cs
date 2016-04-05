@@ -36,7 +36,10 @@ public class Shatter : MonoBehaviour {
     }
     public void Die() { //Basic voxel shattering of cubes or rectangles
         if (wasEnvironment) {
-            GetComponent<NavMeshObstacle>().carving = true; //TODO -- Fix this.   Doesnt work.   Need parent-child thing
+            Transform carver = transform.GetChild(0);
+            carver.GetComponent<NavMeshObstacle>().enabled = true;
+            carver.position = new Vector3(carver.position.x, carver.position.y + 1, carver.position.z);
+            carver.parent = null;
         }
 
         if (shatterMult > 0) { //shatterMult must be a positive integer

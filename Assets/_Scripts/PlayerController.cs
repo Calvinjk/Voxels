@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
     public float mX, mY;
 
     public bool hasJump = true;
+    float jumpMultiplier = 100000f;
 
 
     // Use this for initialization
@@ -50,11 +51,11 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Space) && hasJump) {
             hasJump = false;
-            //rigid.velocity = new Vector3(rigid.velocity.x, jumpPower, rigid.velocity.z);
+            rigid.AddForce(trans.up * jumpPower * jumpMultiplier);
         }
     }
 
-    void OnCollisionEnter(Collision coll) {
+    void OnCollisionStay(Collision coll) {
         if (coll.gameObject.tag == "Ground") {
             hasJump = true;
         }
