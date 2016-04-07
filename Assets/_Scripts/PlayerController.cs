@@ -21,25 +21,27 @@ public class PlayerController : MonoBehaviour {
     void Start() {
         rigid = GetComponent<Rigidbody>();
         trans = transform;
-        camTrans = trans.Find("Main Camera");
+        //camTrans = trans.Find("Main Camera");
     }
 
     // Update is called once per frame
     void FixedUpdate() {
-        mX = Input.GetAxis("Mouse X");
-        mY = Input.GetAxis("Mouse Y");
+        //mX = Input.GetAxis("Mouse X");
+        //mY = Input.GetAxis("Mouse Y");
 
-        rot = trans.localRotation.eulerAngles;
-        rot.y += mX;
+        //rot = trans.localRotation.eulerAngles;
+        //rot.y += mX;
 
+        /*
         camRot = camTrans.localRotation.eulerAngles;
         if (camRot.x > 180) camRot.x -= 360;
         if (camRot.x < -180) camRot.x += 360;
         camRot.x -= mY;
         camRot.x = Mathf.Clamp(camRot.x, vertMin, vertMax);
+        */
 
-        trans.localRotation = Quaternion.Euler(rot);
-        camTrans.localRotation = Quaternion.Euler(camRot);
+        //trans.localRotation = Quaternion.Euler(rot);
+        //camTrans.localRotation = Quaternion.Euler(camRot);
 
         Vector3 vel = Vector3.zero;
         vel += trans.forward * Input.GetAxis("Vertical");
