@@ -10,13 +10,14 @@ public class ThirdPersonController : MonoBehaviour {
 
     public bool ________________;
 
-    public float speed = 0f;
+    float speed = 0f;
     float horizontal = 0f;
     float vertical = 0f;
+    Rigidbody rigid;
 
 	// Use this for initialization
 	void Start () {
-	
+        rigid = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -44,8 +45,9 @@ public class ThirdPersonController : MonoBehaviour {
             this.transform.rotation = (this.transform.rotation * deltaRotation);
         }
 
-        //Give the character some velocity if hes moving
-        GetComponent<Rigidbody>().velocity = transform.forward.normalized * speed * speedMultiplier;
+        //Give the character some velocity if hes moving.  Had to do it like this to keep gravity a thing.
+        Vector3 movementAttempt = transform.forward.normalized * speed * speedMultiplier;
+        rigid.velocity = new Vector3(movementAttempt.x, rigid.velocity.y, movementAttempt.z);
     }
 
     public float AngleNeededToRotate(Transform root, Transform camera, ref float speedOut) {
@@ -61,11 +63,6 @@ public class ThirdPersonController : MonoBehaviour {
         //Convert input into Worldspace coordinates
         Vector3 moveDirection = referentialShift * inputDirection;
         Vector3 axisSign = Vector3.Cross(moveDirection, rootDirection);
-
-        //Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), moveDirection, Color.green);
-        //Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), rootDirection, Color.magenta);
-        //Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), inputDirection, Color.blue);
-        //Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), axisSign, Color.red);
 
         float angleRootToMove = Vector3.Angle(rootDirection, moveDirection) * (axisSign.y >= 0 ? -1f : 1f);
 
