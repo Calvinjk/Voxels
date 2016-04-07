@@ -71,8 +71,4 @@ public class ThirdPersonController : MonoBehaviour {
 
         return angleRootToMove;
     }
-
-    private bool IsInLocomotion() {
-        return GetComponent<Rigidbody>().velocity != Vector3.zero;
-    }
 }
