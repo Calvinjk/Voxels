@@ -33,7 +33,7 @@ public class ThirdPersonCamera : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Update states!
-        if (Input.GetKey(KeyCode.Space)) {
+        if (Input.GetKey(KeyCode.Mouse0)) {  //TODO - what button should this be?   Should it be a toggle instead?
             camState = CamStates.Target;
         } else {
             camState = CamStates.Follow;

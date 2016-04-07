@@ -6,10 +6,12 @@ public class ThirdPersonController : MonoBehaviour {
     public float rotationDegreePerSecond = 120f;
     public float speedMultiplier = 2f;
     public float turnSpeed = .8f;
+    public float jumpPower = 1f;
     public GameObject gamecam;
 
     public bool ________________;
 
+    bool hasJump = true;
     float speed = 0f;
     float horizontal = 0f;
     float vertical = 0f;
@@ -23,6 +25,12 @@ public class ThirdPersonController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
+    }
+
+    void OnCollisionStay(Collision obj) {
+        if (obj.gameObject.tag == "Ground") {
+            hasJump = true;
+        }
     }
 
     void FixedUpdate() {
@@ -48,6 +56,12 @@ public class ThirdPersonController : MonoBehaviour {
         //Give the character some velocity if hes moving.  Had to do it like this to keep gravity a thing.
         Vector3 movementAttempt = transform.forward.normalized * speed * speedMultiplier;
         rigid.velocity = new Vector3(movementAttempt.x, rigid.velocity.y, movementAttempt.z);
+
+        //Shall we jump?
+        if (Input.GetKey(KeyCode.Space) && hasJump) {
+            hasJump = false;
+            rigid.AddForce(new Vector3(0f, jumpPower * 100000f, 0f));
+        }
     }
 
     public float AngleNeededToRotate(Transform root, Transform camera, ref float speedOut) {
