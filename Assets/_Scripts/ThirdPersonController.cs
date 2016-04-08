@@ -11,7 +11,7 @@ public class ThirdPersonController : MonoBehaviour {
 
     public bool ________________;
 
-    bool hasJump = true;
+    float distanceToGround;
     float speed = 0f;
     float horizontal = 0f;
     float vertical = 0f;
@@ -20,6 +20,7 @@ public class ThirdPersonController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rigid = GetComponent<Rigidbody>();
+        distanceToGround = GetComponent<CapsuleCollider>().bounds.extents.y;
 	}
 	
 	// Update is called once per frame
@@ -28,9 +29,7 @@ public class ThirdPersonController : MonoBehaviour {
     }
 
     void OnCollisionStay(Collision obj) {
-        if (obj.gameObject.tag == "Ground") {
-            hasJump = true;
-        }
+
     }
 
     void FixedUpdate() {
@@ -58,8 +57,7 @@ public class ThirdPersonController : MonoBehaviour {
         rigid.velocity = new Vector3(movementAttempt.x, rigid.velocity.y, movementAttempt.z);
 
         //Shall we jump?
-        if (Input.GetKey(KeyCode.Space) && hasJump) {
-            hasJump = false;
+        if (Input.GetKey(KeyCode.Space) && IsGrounded()) {
             rigid.AddForce(new Vector3(0f, jumpPower * 100000f, 0f));
         }
     }
@@ -81,5 +79,9 @@ public class ThirdPersonController : MonoBehaviour {
         float angleRootToMove = Vector3.Angle(rootDirection, moveDirection) * (axisSign.y >= 0 ? -1f : 1f);
 
         return angleRootToMove;
+    }
+
+    public bool IsGrounded() {
+        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);  //The 0.1f is to account for irregularities in the ground or possibly slopes.
     }
 }

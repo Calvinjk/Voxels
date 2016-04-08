@@ -90,7 +90,7 @@ public class ThirdPersonCamera : MonoBehaviour {
         if (Physics.Linecast(fromObject, toTarget, out wallHit)) {
             toTarget = new Vector3(wallHit.point.x, toTarget.y, wallHit.point.z);  //This will put the camera "inside" the wall in certain situations
 
-            //Moves the camera a set position away from walls
+            //Moves the camera's target a set position away from walls
             Vector3 offset = follow.position - wallHit.point;
             offset.Normalize();
             offset *= wallOffset;

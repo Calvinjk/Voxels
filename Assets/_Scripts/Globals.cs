@@ -12,6 +12,7 @@ public class Globals : MonoBehaviour {
 	void Update () {
 	    if (Input.GetKey(KeyCode.Escape)) {
             print("Tried to quit.");
+            Application.Quit();
         }
 	}
 }
