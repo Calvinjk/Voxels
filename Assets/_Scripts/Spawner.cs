@@ -12,10 +12,13 @@ public class Spawner : MonoBehaviour {
     
     private float curSpawnTimer     = 0f;
     private float variation;
+    private Globals globals;
 
     // Use this for initialization
     void Start () {
         variation = randomOffset + 1f;  //This will be the default value beacuse Random.Range will never equal it
+
+        globals = (Globals)GameObject.Find("Main Camera").GetComponent(typeof(Globals));
 	}
 	
 	// Update is called once per frame
@@ -43,9 +46,13 @@ public class Spawner : MonoBehaviour {
         curSpawnTimer = 0f;
         variation = randomOffset + 1f; ;
 
-        Vector3 pos = transform.position;
-        Vector3 spawnPos = new Vector3(pos.x + Random.Range(-spawnOffset, spawnOffset), pos.y, pos.z + Random.Range(-spawnOffset, spawnOffset));
-        GameObject obj = Instantiate(thingToSpawn, spawnPos, Quaternion.identity) as GameObject;
-        obj.name = thingToSpawn.name;
+        if (globals.numEnemies < globals.maxEnemies) {
+            ++globals.numEnemies;
+
+            Vector3 pos = transform.position;
+            Vector3 spawnPos = new Vector3(pos.x + Random.Range(-spawnOffset, spawnOffset), pos.y, pos.z + Random.Range(-spawnOffset, spawnOffset));
+            GameObject obj = Instantiate(thingToSpawn, spawnPos, Quaternion.identity) as GameObject;
+            obj.name = thingToSpawn.name;
+        }
     }
 }

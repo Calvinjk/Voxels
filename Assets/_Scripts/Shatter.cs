@@ -16,10 +16,12 @@ public class Shatter : MonoBehaviour {
     public bool wasEnvironment      = false;
     public bool ____________;
 
+    private Globals globals;
+
 	// Use this for initialization
 	void Start () {
-	
-	}
+        globals = (Globals)GameObject.Find("Main Camera").GetComponent(typeof(Globals));
+    }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -36,9 +38,16 @@ public class Shatter : MonoBehaviour {
     public void Die() { //Basic voxel shattering of cubes or rectangles
         if (wasEnvironment) {
             Transform carver = transform.GetChild(0);
-            carver.GetComponent<NavMeshObstacle>().enabled = true;
-            carver.position = new Vector3(carver.position.x, carver.position.y + 1, carver.position.z);
-            carver.parent = null;
+            if (carver.GetComponent<NavMeshObstacle>().enabled) {
+                carver.GetComponent<NavMeshObstacle>().enabled = false;
+                carver.parent = null;
+            } else {             
+                carver.GetComponent<NavMeshObstacle>().enabled = true;
+                carver.position = new Vector3(carver.position.x, carver.position.y + 1, carver.position.z);
+                carver.parent = null;
+            }   
+        } else {
+            --globals.numEnemies;
         }
 
         if (shatterMult > 0) { //shatterMult must be a positive integer
