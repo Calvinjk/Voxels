@@ -82,6 +82,6 @@ public class ThirdPersonController : MonoBehaviour {
     }
 
     public bool IsGrounded() {
-        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);  //The 0.1f is to account for irregularities in the ground or possibly slopes.
+        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.2f);  //The 0.1f is to account for irregularities in the ground or possibly slopes.
     }
 }

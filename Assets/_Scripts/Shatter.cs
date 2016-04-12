@@ -10,7 +10,7 @@ public class Shatter : MonoBehaviour {
     public float maxVoxelLifeSpan   = 0f;
 
     public bool blowApart           = false;
-    public bool keepVelocity        = false;
+    public bool keepVelocity        = false;    //Does not currently work -- TODO --
     public bool shatterOnVoxelTouch = false;
     public bool enterToShatter      = false;
     public bool wasEnvironment      = false;
@@ -25,7 +25,6 @@ public class Shatter : MonoBehaviour {
 	void FixedUpdate () {
         if (enterToShatter && Input.GetKeyDown(KeyCode.Return)) {
             Die();
-            //Time.timeScale = 0;
         }
 	}
 
@@ -93,6 +92,10 @@ public class Shatter : MonoBehaviour {
         killSelf.minTimeAlive = minVoxelLifeSpan;
         killSelf.maxTimeAlive = maxVoxelLifeSpan;
         killSelf.startTimer = true;
+
+        if (wasEnvironment) {
+            curVox.transform.localScale *= .9f;
+        }
 
         AddVoxelVelocity(pos, curVox, velocity);
 

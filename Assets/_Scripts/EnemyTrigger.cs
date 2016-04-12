@@ -17,8 +17,13 @@ public class EnemyTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider obj) {
         for (int i = 0; i < enemies.Length; ++i) {
-            EnemyBehavior enemyBehavior = (EnemyBehavior)enemies[i].GetComponent(typeof(EnemyBehavior));
-            enemyBehavior.activated = true;
+            if (enemies[i].name == "Spawner") {
+                Spawner spawner = (Spawner)enemies[i].GetComponent(typeof(Spawner));
+                spawner.activated = true;
+            } else {
+                EnemyBehavior enemyBehavior = (EnemyBehavior)enemies[i].GetComponent(typeof(EnemyBehavior));
+                enemyBehavior.activated = true;
+            }
         }
     }
 }

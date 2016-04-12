@@ -11,7 +11,6 @@ public class Globals : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	    if (Input.GetKey(KeyCode.Escape)) {
-            print("Tried to quit.");
             Application.Quit();
         }
 	}
