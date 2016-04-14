@@ -24,14 +24,6 @@ public class ThirdPersonController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        
-    }
-
-    void OnCollisionStay(Collision obj) {
-
-    }
-
     void FixedUpdate() {
         //Pull values
         horizontal  = Input.GetAxis("Horizontal");
