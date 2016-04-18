@@ -50,7 +50,7 @@ public class ThirdPersonController : MonoBehaviour {
 
         //Shall we jump?
         if (Input.GetKey(KeyCode.Space) && IsGrounded()) {
-            rigid.AddForce(new Vector3(0f, jumpPower * 100000f, 0f));
+            rigid.velocity = new Vector3(0f, jumpPower, 0f);
         }
     }
 
