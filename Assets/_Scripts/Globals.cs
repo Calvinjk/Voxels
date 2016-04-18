@@ -5,11 +5,12 @@ public class Globals : MonoBehaviour {
 
     public int maxEnemies;
     public bool ___________________;
+    public int curLevel = 1;
     public int numEnemies;
     
 	// Use this for initialization
 	void Start () {
-	
+        
 	}
 	
 	// Update is called once per frame

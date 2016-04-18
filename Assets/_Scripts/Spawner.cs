@@ -18,7 +18,7 @@ public class Spawner : MonoBehaviour {
     void Start () {
         variation = randomOffset + 1f;  //This will be the default value beacuse Random.Range will never equal it
 
-        globals = (Globals)GameObject.Find("Main Camera").GetComponent(typeof(Globals));
+        globals = (Globals)GameObject.Find("Globals").GetComponent(typeof(Globals));
 	}
 	
 	// Update is called once per frame
