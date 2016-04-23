@@ -21,7 +21,7 @@ public class KillSelf : MonoBehaviour {
             curTimeAlive += Time.deltaTime;
         }
         if (curTimeAlive > killTime) {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

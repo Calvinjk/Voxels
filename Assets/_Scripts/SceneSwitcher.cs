@@ -19,15 +19,12 @@ public class SceneSwitcher : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	    if (Input.GetKeyDown(KeyCode.Keypad0)) {
-            print("Tried to switch to 0");
             SceneManager.LoadScene(0);
         }
         if (Input.GetKeyDown(KeyCode.Keypad1)) {
-            print("Tried to switch to 1");
             SceneManager.LoadScene(1);
         }
         if (Input.GetKeyDown(KeyCode.Keypad2)) {
-            print("Tried to switch to 2");
             SceneManager.LoadScene(2);
         }
     }

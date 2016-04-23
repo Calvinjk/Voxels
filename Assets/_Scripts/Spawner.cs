@@ -28,6 +28,11 @@ public class Spawner : MonoBehaviour {
             if (randomize) { //If randomize is enabled, put some variation on the spawns
                 if (variation == randomOffset + 1f) {
                     variation = Random.Range(-randomOffset, randomOffset);
+
+                    //Fix below zero values
+                    if (frequency + variation < 0) {
+                        variation = -frequency;
+                    }
                 }
                 
                 if (curSpawnTimer > (frequency + variation)) {

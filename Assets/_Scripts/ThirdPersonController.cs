@@ -74,6 +74,8 @@ public class ThirdPersonController : MonoBehaviour {
     }
 
     public bool IsGrounded() {
-        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.2f);  //The 0.1f is to account for irregularities in the ground or possibly slopes.
+        var layerMask = 1 << 8;
+        layerMask = ~layerMask;
+        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.05f, layerMask);  //The 0.1f is to account for irregularities in the ground or possibly slopes.
     }
 }
