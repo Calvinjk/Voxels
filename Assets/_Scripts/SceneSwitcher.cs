@@ -40,6 +40,10 @@ public class SceneSwitcher : MonoBehaviour {
                 }
             }
         }
+        
+        if (SceneManager.GetActiveScene().buildIndex == 6 && Input.GetKeyDown(KeyCode.Space)) {
+            SceneManager.LoadScene(sceneToLoad);
+        }
 
         if (Input.GetKey(KeyCode.Escape)) {
             Application.Quit();
