@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour {
 
+    public bool introScene = false;
+    public GameObject titleCanvas;
+    public GameObject controlCanvas;
     private int sceneToLoad = -1;
 
     // Use this for initialization
@@ -14,18 +17,32 @@ public class SceneSwitcher : MonoBehaviour {
         else { //Endtile
             sceneToLoad = SceneManager.GetActiveScene().buildIndex + 1;
         }
+
+        if (sceneToLoad == (SceneManager.sceneCountInBuildSettings)) { //After final level, go back to start
+            sceneToLoad = 0;
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
-	    if (Input.GetKeyDown(KeyCode.Keypad0)) {
-            SceneManager.LoadScene(0);
+        if(introScene || SceneManager.GetActiveScene().buildIndex == 1) {
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return) && introScene) {
+                if(controlCanvas.activeInHierarchy) {
+                    titleCanvas.SetActive(true);
+                    controlCanvas.SetActive(false);
+                } else {
+                    titleCanvas.SetActive(false);
+                    controlCanvas.SetActive(true);
+                }
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Keypad1)) {
-            SceneManager.LoadScene(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad2)) {
-            SceneManager.LoadScene(2);
+
+        if (Input.GetKey(KeyCode.Escape)) {
+            Application.Quit();
         }
     }
 
